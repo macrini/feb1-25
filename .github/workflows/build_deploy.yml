@@ -68,6 +68,8 @@ jobs:
            # Record which versions were built
            - name: Update Version History
              run: node .github/scripts/update-history.js
+             env:
+                  TARGET_MODULE: ${{ needs.prepare.outputs.build_modules }}
 
            # Save build output for deployment
            - name: Upload Build
