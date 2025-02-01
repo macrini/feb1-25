@@ -2,7 +2,33 @@
 // Returns list of modules needing updates
 const fs = require('fs');
 const path = require('path');
-const semver = require('semver');
+
+/**
+ * Compares two version strings (assumed to be in 'major.minor.patch' format)
+ * Returns true if versionA is greater than versionB, otherwise false.
+ *
+ * @param {string} versionA - The first version string.
+ * @param {string} versionB - The second version string.
+ * @returns {boolean} - True if versionA > versionB, else false.
+ */
+function isVersionGreater(versionA, versionB) {
+  // Split the version strings into their components and convert to numbers
+  const aParts = versionA.split('.').map(Number);
+  const bParts = versionB.split('.').map(Number);
+
+  // Compare each part in order: major, minor, patch
+  for (let i = 0; i < 3; i++) {
+    if (aParts[i] > bParts[i]) return true;
+    if (aParts[i] < bParts[i]) return false;
+  }
+  // They are equal
+  return false;
+}
+
+// Example usage:
+console.log(isVersionGreater('1.2.3', '1.2.0')); // true
+console.log(isVersionGreater('1.2.3', '1.3.0')); // false
+console.log(isVersionGreater('1.2.3', '1.2.3')); // false
 
 function getModulesToBuild() {
   // Read version history, default to empty if file doesn't exist
@@ -22,7 +48,7 @@ function getModulesToBuild() {
       const pkg = JSON.parse(fs.readFileSync(pkgPath));
       const oldVersion = history[dir] || '0.0.0';
 
-      return semver.gt(pkg.version, oldVersion);
+      return isVersionGreater(pkg.version, oldVersion);
     });
 
   // Output for GitHub Actions
