@@ -25,11 +25,6 @@ function isVersionGreater(versionA, versionB) {
   return false;
 }
 
-// Example usage:
-console.log(isVersionGreater('1.2.3', '1.2.0')); // true
-console.log(isVersionGreater('1.2.3', '1.3.0')); // false
-console.log(isVersionGreater('1.2.3', '1.2.3')); // false
-
 function getModulesToBuild() {
   // Read version history, default to empty if file doesn't exist
   const historyPath = path.join(process.cwd(), '.github/module-versions.json');
